@@ -1,0 +1,154 @@
+#container
+  header
+    h2 Quiz...
+  #main
+    #yes
+      div.background O
+      div.respondents
+    #no
+      div.background X
+      div.respondents
+  footer
+    div  답변대기중인사람들(
+      span#watingNum 0
+      ) : 
+    #waiting
+      //foreach
+      #circle-id.circle.others
+script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js')
+script(src='/socket.io/socket.io.js')
+script
+  jQuery.fn.center = function () {
+    this.css("position","absolute");
+    this.css("top", ( $(window).height() - this.height() ) / 2+$(window).scrollTop() + "px");
+    this.css("left", ( $(window).width() - this.width() ) / 2+$(window).scrollLeft() + "px");
+    return this;
+  };
+      
+  var SS = {
+    me: null,
+    initEventListener: function() {
+      $('#yes').click(function(e) {
+        socket.emit('answer submit', {answer:'yes'});
+        //streamHub.publish('entryAnswerSubmitCommand', '{"answer":"yes"}');
+      }).css('cursor', 'pointer');
+      $('#no').click(function(e) {
+        socket.emit('answer submit', {answer:'no'});
+        //streamHub.publish('entryAnswerSubmitCommand', '{"answer":"no"}');
+      }).css('cursor', 'pointer');
+    },
+    addNewUser: function(id, type) {
+      $('<div/>').attr({
+        'id':'circle-'+id,
+        'class':'circle '+ type
+      }).appendTo('#waiting');
+      this.countWaiting();
+    },
+    removeUser: function(id) {
+      if($('#circle-'+id)) {
+        $('#circle-'+id).remove();
+        this.countWaiting();
+      }
+    },
+    countWaiting: function() {
+      $('#watingNum').html($('#waiting').children().length);
+    },
+    selectAnswer: function(id, to) {
+      var obj = $('#circle-' + id);
+      var target = $('#' +to+ ' .respondents');
+      if(target.find('#circle-' + id).length < 1) {
+        var targetOffset;
+        var objOffset = obj.offset();
+        if (target.find('.circle').size() > 0) {
+          targetOffset = target.find('.circle').last().offset();
+        } else {
+          targetOffset = target.offset();
+        }
+        obj.animate({
+          left: targetOffset.left- obj.offset().left,
+          top: targetOffset.top - obj.offset().top
+        }, 500, function() {
+          obj.css({
+            'left':0
+             ,'top':0
+          })
+            target.append(obj);
+        });
+        this.countWaiting();
+      }
+    },
+    notificate: function(timer, text, callback) {
+      if ($('#countdown').size() < 1) {
+        $(document.body).append('<div id="countdown"/>');
+        $('#countdown').center();
+        $('#countdown').css({'opacity': '0.8'});
+      }
+      if (text) {
+        $('#countdown').html('<div style="font-size:0.15em; margin-top:100px;">'+ text + '</div>');
+      } else {
+        $('#countdown').text(timer--);
+      }
+      if (timer > 0) {
+        setTimeout(function() {
+          SS.notificate(timer, null, callback);
+        }, 1000);
+      } else {
+        setTimeout(function() {
+          $('#countdown').remove();
+          callback();
+        }, 1000);
+      }
+    },
+    notificateCloseQuiz: function() {
+      this.notificate(5, '5초후에 마감합니다.', SS.closeQuiz);
+    },
+    closeQuiz: function() {
+      $('#yes').unbind('click').css('cursor', 'auto');
+      $('#no').unbind('click').css('cursor', 'auto');
+    },
+    notificateNextQuiz: function(title) {
+      this.notificate(3, '다음 문제로 이동합니다.', function() {SS.nextQuestion(title);});
+    },
+    nextQuestion: function(title) {
+      $('header h2').html(title);
+      $('.circle').appendTo('#waiting');
+      this.initEventListener();
+    }
+  };
+
+  var notification;
+  var entry
+  
+  $(document).ready(function(){
+    // 알림 청취
+    notification = io.connect('/notification');
+    notification.on('answer submit', function(data) {
+      SS.selectAnswer(notification.entryId, notification.answer);
+    });
+    notification.on('me', function(data) {
+      SS.me = notification.entryId;
+      $.get('<spring:url value="/entryConn" />', {entryId: SS.me});
+    });
+    notification.on('close quiz', function(data) {
+      SS.notificateCloseQuiz();
+    });
+    notification.on('next quiz', function(data) {
+      SS.notificateNextQuiz(notification.quiz);
+    });
+    
+    // 참가
+    entry = io.connect('/entry');
+    entry.on('in', function(data) {
+      if(message.state === 'entryIn') {
+        if(SS.me == message.entryId) {
+          SS.addNewUser(message.entryId, 'me');
+        } else {
+          SS.addNewUser(message.entryId, 'others');
+        }
+      } else if(message.state === 'entryOut') {
+        SS.removeUser(message.entryId);
+      }
+    });
+    
+    SS.initEventListener();
+  });
