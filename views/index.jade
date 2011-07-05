@@ -92,8 +92,6 @@ script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js')
 script(src='/socket.io/socket.io.js')
 script(src='/javascripts/prettify.js')
 script
-  var socket, namespace, custom;
-  
   $(document).ready(function(){
      $('form').css('display', 'none');
      prettyPrint();
@@ -101,9 +99,7 @@ script
     //Simple Example
     $('#simple-connect').click(function() {
       $(this).unbind('click');
-      if (!socket) {
-        socket = io.connect();
-      }
+      var socket = io.connect();
       socket.on('connect', function() {
         $('#simple-form').css('display', 'block');
         $('#simple-content').append($('<p>').text('Connected'));
@@ -126,10 +122,7 @@ script
     // Namespace Example
     $('#namespace-connect').click(function() {
       $(this).unbind('click');
-      if (!socket) {
-        socket = io.connect();
-      }
-      var namespace = socket.socket.of('/namespace');
+      var namespace = io.connect('/namespace');
       namespace.on('connect', function() {
         $('#namespace-form').css('display', 'block');
         $('#namespace-content').append($('<p>').text('Connected'));
@@ -152,10 +145,7 @@ script
     // Custom Event Example
     $('#custom-connect').click(function() {
       $(this).unbind('click');
-      if (!socket) {
-        socket = io.connect();
-      }
-      var custom = socket.socket.of('/custom');
+      var custom = io.connect('/custom');
       custom.on('connect', function() {
         $('#custom-form').css('display', 'block');
         $('#custom-content').append($('<p>').text('Connected'));

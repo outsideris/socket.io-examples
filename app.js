@@ -45,8 +45,8 @@ app.get('/quiz', function(req, res){
 app.listen(3000);
 
 io.configure(function(){
-  io.enable('browser client etag');
-  io.set('log level', 1);
+//  io.enable('browser client etag');
+//  io.set('log level', 1);
   io.set('transports', [
      'websocket'
   , 'flashsocket'
@@ -73,7 +73,7 @@ var namespace = io
   .of('/namespace')
   .on('connection', function(socket) {
     socket.on('message', function(data) {
-      console.log('namespace msg');
+      console.log('in namespace :' + data);
       socket.broadcast.send(data);
     }); 
   });
@@ -83,7 +83,7 @@ var custom = io
   .of('/custom')
   .on('connection', function(socket) {
     socket.on('fromclient', function(data) {
-      console.log('test');
+      console.log('in custom: ' + data);
       socket.broadcast.emit('fromserver', data);
     }); 
   });
