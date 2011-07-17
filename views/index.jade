@@ -168,16 +168,15 @@ script
     // Volatile Event Example
     $('#volatile-connect').click(function() {
       $(this).unbind('click');
-      if (!socket) {
-        socket = io.connect();
-      }
-      var volatile = socket.socket.of('/volatile');
+      var volatile = io.connect('/volatile');
       volatile.on('connect', function() {
         $('#volatile-content').append($('<p>').text('Connected'));
       }); 
 
       volatile.on('current time', function(msg) {
-        $('#volatile-content').append($('<p>').text(msg + ' from server'));
+        var content = $('#volatile-content');
+        content.append($('<p>').text(msg + ' from server'));
+        content.scrollTop(content.height());
       });
     });
     
