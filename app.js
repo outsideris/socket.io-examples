@@ -110,6 +110,7 @@ var Room = io
     var joinedRoom = null;
     socket.on('join room', function(data) {
       socket.join(data);
+      joinedRoom = data;
       socket.emit('joined', 'you\'ve joined ' + data);
       socket.broadcast.to(joinedRoom).send('someone joined room');
     }); 
@@ -117,9 +118,9 @@ var Room = io
       if (joinedRoom) {
         socket.broadcast.to(joinedRoom).send(data);
       } else {
-        socket.send('you\'re not joined a room.');
+        socket.send('you\'re not joined a room. select a room and then push join.');
       }
     });
   });
-  
+
 console.log("Express server listening on port %d", app.address().port);

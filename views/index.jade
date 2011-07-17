@@ -192,22 +192,22 @@ script
     // Room Event Example
     $('#room-connect').click(function() {
       $(this).unbind('click');
-      if (!socket) {
-        socket = io.connect();
-      }
       var joined = false;
-      var room = socket.socket.of('/room');
+      var room = io.connect('/room');
+      var content = $('#room-content');
       room.on('connect', function() {
         $('#room-form').css('display', 'block');
-        $('#room-content').append($('<p>').text('Connected'));
+        content.append($('<p>').text('Connected'));
       }); 
       
       room.on('joined', function(msg) {
-        $('#room-content').append($('<p>').text(msg + ' from server'));
+        content.append($('<p>').text(msg + ' from server'));
+        content.scrollTop(content.height());
       });
       
       room.on('message', function(msg) {
-        $('#room-content').append($('<p>').text(msg + ' from server'));
+        content.append($('<p>').text(msg + ' from server'));
+        content.scrollTop(content.height());
       });
       
       $('#room-join').click(function(e) {
@@ -217,13 +217,12 @@ script
       
       $('#room-form').submit(function(e) {
         e.preventDefault();
-        if (joined) {
-          var textObj = $('#room-text');
-          var msg = textObj.val();
-          textObj.val('');
-          $('#room-content').append($('<p>').text(msg + ' from me'));
-          room.emit('fromclient', msg);
-        }
+        var textObj = $('#room-text');
+        var msg = textObj.val();
+        textObj.val('');
+        content.append($('<p>').text(msg + ' from me'));
+        content.scrollTop(content.height());
+        room.emit('fromclient', msg);
       });
     }); 
     
