@@ -80,7 +80,15 @@
       input(type='button', value='join')#room-join
       input(type='text')#room-text
       input(type='submit', value='Submit')
-      
+
+  section#json.example
+    span.title JSON parse Example
+    input(type='button', value='connect')#json-connect.connect
+    #json-content.textbox
+    form#json-form
+      input(type='text')#json-text
+      input(type='submit', value='Submit')   
+        
   footer
     | Written by 
     a(href='http://blog.outsider.ne.kr', target='_blank') Outsider
@@ -226,4 +234,30 @@ script
       });
     }); 
     
+    //JSON Parse Example
+    $('#json-connect').click(function() {
+      $(this).unbind('click');
+      var socket = io.connect('/json');
+      var content = $('#json-content');
+      socket.on('connect', function() {
+        $('#json-form').css('display', 'block');
+        content.append($('<p>').text('Connected'));  
+      });
+      
+      socket.on('message', function(msg) {
+        $('#json-content').append($('<p>').text(msg.text + ' from server'));
+        content.scrollTop(content.height());
+      });
+      
+      $('#json-form').submit(function(e) {
+        e.preventDefault();
+        var textObj = $('#json-text');   
+        var msg = textObj.val();
+        textObj.val('');
+        $('#json-content').append($('<p>').text(msg + ' from me'));
+        content.scrollTop(content.height());
+        socket.send(msg);
+      });
+    });
+
   });
