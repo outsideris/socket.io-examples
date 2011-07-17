@@ -40,7 +40,7 @@
           |   });
           |   
           |   socket.on('message', function(msg) {
-          |     $('#simple-content').append($('<p>').text(msg + ' from server'));
+          |     $('#simple-content').append($('<p>').text(msg).append($('<em>').text(' from server')));
           |   });
           |   
           |   $('#simple-form').submit(function(e) {
@@ -48,7 +48,7 @@
           |     var textObj = $('#simple-text');   
           |     var msg = textObj.val();
           |     textObj.val('');
-          |     $('#simple-content').append($('<p>').text(msg + ' from me'));
+          |     $('#simple-content').append($('<p>').text(msg).append($('<em>').text(' from me')));
           |     socket.send(msg);
           |   });
   section#namespace.example
@@ -121,7 +121,7 @@ script
       });
       
       socket.on('message', function(msg) {
-        $('#simple-content').append($('<p>').text(msg + ' from server'));
+        $('#simple-content').append($('<p>').text(msg).append($('<em>').text(' from server')));
         content.scrollTop(content.height());
       });
       
@@ -131,7 +131,7 @@ script
         var msg = textObj.val();
         if (msg !== '') {
           textObj.val('');
-          $('#simple-content').append($('<p>').text(msg + ' from me'));
+          $('#simple-content').append($('<p>').text(msg).append($('<em>').text(' from me')));
           content.scrollTop(content.height());
           socket.send(msg);
         }
@@ -149,7 +149,7 @@ script
       }); 
       
       namespace.on('message', function(msg) {
-        content.append($('<p>').text(msg + ' from server'));
+        content.append($('<p>').text(msg).append($('<em>').text(' from server')));
         content.scrollTop(content.height());
       });
       
@@ -159,7 +159,7 @@ script
         var msg = textObj.val();
         if (msg !== '') {
           textObj.val('');
-          content.append($('<p>').text(msg + ' from me'));
+          content.append($('<p>').text(msg).append($('<em>').text(' from me')));
           content.scrollTop(content.height());
           namespace.send(msg);
         }
@@ -177,7 +177,7 @@ script
       }); 
       
       custom.on('fromserver', function(msg) {
-        $('#custom-content').append($('<p>').text(msg + ' from server'));
+        $('#custom-content').append($('<p>').text(msg).append($('<em>').text(' from server')));
         content.scrollTop(content.height());
       });
       
@@ -187,7 +187,7 @@ script
         var msg = textObj.val();
         if (msg !== '') {
           textObj.val('');
-          content.append($('<p>').text(msg + ' from me'));
+          content.append($('<p>').text(msg).append($('<em>').text(' from me')));
           content.scrollTop(content.height());
           custom.emit('fromclient', msg);
         }
@@ -204,7 +204,7 @@ script
 
       volatile.on('current time', function(msg) {
         var content = $('#volatile-content');
-        content.append($('<p>').text(msg + ' from server'));
+        content.append($('<p>').text(msg).append($('<em>').text(' from server')));
         content.scrollTop(content.height());
       });
     });
@@ -221,12 +221,12 @@ script
       }); 
       
       room.on('joined', function(msg) {
-        content.append($('<p>').text(msg + ' from server'));
+        content.append($('<p>').text(msg).append($('<em>').text(' from server')));
         content.scrollTop(content.height());
       });
       
       room.on('message', function(msg) {
-        content.append($('<p>').text(msg + ' from server'));
+        content.append($('<p>').text(msg).append($('<em>').text(' from server')));
         content.scrollTop(content.height());
       });
       
@@ -241,7 +241,7 @@ script
         var msg = textObj.val();
         if (msg !== '') {
           textObj.val('');
-          content.append($('<p>').text(msg + ' from me'));
+          content.append($('<p>').text(msg).append($('<em>').text(' from me')));
           content.scrollTop(content.height());
           room.emit('fromclient', msg);
         }
@@ -259,7 +259,7 @@ script
       });
       
       socket.on('message', function(msg) {
-        $('#json-content').append($('<p>').text(msg.text + ' from server'));
+        $('#json-content').append($('<p>').text(msg.text).append($('<em>').text(' from server')));
         content.scrollTop(content.height());
       });
       
@@ -269,7 +269,7 @@ script
         var msg = textObj.val();
         if (msg !== '') {
           textObj.val('');
-          $('#json-content').append($('<p>').text(msg + ' from me'));
+          $('#json-content').append($('<p>').text(msg).append($('<em>').text(' from me')));
           content.scrollTop(content.height());
           socket.send(msg);
         }
