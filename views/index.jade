@@ -1,7 +1,11 @@
 #container
   header 
     .subtext Examples of
-  section.description It's not official examples. I write these examples for just learning Socket.IO 0.7+.
+    a(href='http://socket.io/', target='_blank').logo Socket.IO
+    a(href='http://socket.io/', target='_blank').download
+      span.version v
+      span.number .7
+  section.description It's not official examples. I write these examples for just learning Socket.IO v0.7+.
     | You can see official examples, chat and irc, here.
   section#simple.example
     span.title Simple Example
@@ -48,7 +52,7 @@
           |     socket.send(msg);
           |   });
   section#namespace.example
-    span Namespace Example
+    span.title Namespace Example
     input(type='button', value='connect')#namespace-connect.connect
     #namespace-content.textbox
     form#namespace-form
@@ -56,7 +60,7 @@
       input(type='submit', value='Submit')
       
   section#custom.example
-    span Custom Event Example
+    span.title Custom Event Example
     input(type='button', value='connect')#custom-connect.connect
     #custom-content.textbox
     form#custom-form
@@ -64,12 +68,12 @@
       input(type='submit', value='Submit')
       
   section#volatile.example
-    span Volatile Event Example
+    span.title Volatile Event Example
     input(type='button', value='connect')#volatile-connect.connect
     #volatile-content.textbox
 
   section#room.example
-    span Room Event Example
+    span.title Room Event Example
     input(type='button', value='connect')#room-connect.connect
     #room-content.textbox
     form#room-form
@@ -123,10 +127,12 @@ script
         e.preventDefault();
         var textObj = $('#simple-text');   
         var msg = textObj.val();
-        textObj.val('');
-        $('#simple-content').append($('<p>').text(msg + ' from me'));
-        content.scrollTop(content.height());
-        socket.send(msg);
+        if (msg !== '') {
+          textObj.val('');
+          $('#simple-content').append($('<p>').text(msg + ' from me'));
+          content.scrollTop(content.height());
+          socket.send(msg);
+        }
       });
     });
     
@@ -149,10 +155,12 @@ script
         e.preventDefault();
         var textObj = $('#namespace-text');
         var msg = textObj.val();
-        textObj.val('');
-        content.append($('<p>').text(msg + ' from me'));
-        content.scrollTop(content.height());
-        namespace.send(msg);
+        if (msg !== '') {
+          textObj.val('');
+          content.append($('<p>').text(msg + ' from me'));
+          content.scrollTop(content.height());
+          namespace.send(msg);
+        }
       });
     });
     
@@ -175,10 +183,12 @@ script
         e.preventDefault();
         var textObj = $('#custom-text');
         var msg = textObj.val();
-        textObj.val('');
-        content.append($('<p>').text(msg + ' from me'));
-        content.scrollTop(content.height());
-        custom.emit('fromclient', msg);
+        if (msg !== '') {
+          textObj.val('');
+          content.append($('<p>').text(msg + ' from me'));
+          content.scrollTop(content.height());
+          custom.emit('fromclient', msg);
+        }
       });
     });
     
@@ -227,10 +237,12 @@ script
         e.preventDefault();
         var textObj = $('#room-text');
         var msg = textObj.val();
-        textObj.val('');
-        content.append($('<p>').text(msg + ' from me'));
-        content.scrollTop(content.height());
-        room.emit('fromclient', msg);
+        if (msg !== '') {
+          textObj.val('');
+          content.append($('<p>').text(msg + ' from me'));
+          content.scrollTop(content.height());
+          room.emit('fromclient', msg);
+        }
       });
     }); 
     
@@ -253,10 +265,12 @@ script
         e.preventDefault();
         var textObj = $('#json-text');   
         var msg = textObj.val();
-        textObj.val('');
-        $('#json-content').append($('<p>').text(msg + ' from me'));
-        content.scrollTop(content.height());
-        socket.send(msg);
+        if (msg !== '') {
+          textObj.val('');
+          $('#json-content').append($('<p>').text(msg + ' from me'));
+          content.scrollTop(content.height());
+          socket.send(msg);
+        }
       });
     });
 
