@@ -73,7 +73,6 @@ var namespace = io
   .of('/namespace')
   .on('connection', function(socket) {
     socket.on('message', function(data) {
-      console.log('in namespace :' + data);
       socket.broadcast.send(data);
     }); 
   });
@@ -83,7 +82,6 @@ var custom = io
   .of('/custom')
   .on('connection', function(socket) {
     socket.on('fromclient', function(data) {
-      console.log('in custom: ' + data);
       socket.broadcast.emit('fromserver', data);
     }); 
   });
