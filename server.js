@@ -37,7 +37,7 @@ app.get('/', function(req, res){
   });
 });
 
-app.listen(3000);
+app.listen(process.env['app_port']);
 
 io.configure(function(){
   io.enable('browser client etag');
