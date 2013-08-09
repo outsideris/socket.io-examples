@@ -4,10 +4,13 @@
  */
 
 var express = require('express')
+  , http = require('http')
   , sys = require('sys');
 
-var app = module.exports = express.createServer()
-  , io = require('socket.io').listen(app);
+var app = module.exports = express()
+  , server = http.createServer(app);
+
+var io = require('socket.io').listen(server);
 
 // Configuration
 
@@ -37,7 +40,7 @@ app.get('/', function(req, res){
   });
 });
 
-app.listen(process.env['app_port'] || 8005);
+server.listen(process.env['app_port'] || 8005);
 
 io.configure(function(){
   io.enable('browser client etag');
@@ -131,4 +134,4 @@ var json = io
   });
 
 
-console.log("Express server listening on port %d", app.address().port);
+console.log("Express server listening");
