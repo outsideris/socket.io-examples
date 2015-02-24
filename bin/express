@@ -60,3 +60,7 @@ function onError(error) {
 function onListening() {
   debug('Listening on port ' + server.address().port);
 }
+
+// Integrating Socket.IO
+var io = require('socket.io').listen(server);
+require('../socketio')(io);
