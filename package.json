@@ -1,11 +1,11 @@
 {
     "name": "socket.io-examples"
-  , "version": "0.0.2"
+  , "version": "0.1.0"
   , "private": true
   , "dependencies": {
-      "express": "~3.3.4"
-    , "stylus": ">= 0.0.1"
-    , "jade": ">= 0.0.1"
-    , "socket.io": "~0.9.16"
+      "express": "^4.12.0"
+    , "stylus": "^0.50.0"
+    , "jade": "^1.9.2"
+    , "socket.io": "~1.3.4"
   }
 }
