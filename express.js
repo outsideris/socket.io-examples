@@ -1,46 +1,60 @@
+var express = require('express');
+var path = require('path');
+var favicon = require('serve-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 
-/**
- * Module dependencies.
- */
+var routes = require('./routes/index');
 
-var express = require('express')
-  , http = require('http')
-  , sys = require('sys');
+var app = express();
+var io = require('socket.io').listen(app);
 
-var app = module.exports = express()
-  , server = http.createServer(app);
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
-var io = require('socket.io').listen(server);
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(require('stylus').middleware(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Configuration
+app.use('/', routes);
 
-app.configure(function(){
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(require('stylus').middleware({ src: __dirname + '/public' }));
-  app.use(app.router);
-  app.use(express.static(__dirname + '/public'));
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
-app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
-});
+// error handlers
 
-app.configure('production', function(){
-  app.use(express.errorHandler()); 
-});
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+  app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+      message: err.message,
+      error: err
+    });
+  });
+}
 
-// Routes
-
-app.get('/', function(req, res){
-  res.render('index', {
-    title: 'Express'
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+  res.status(err.status || 500);
+  res.render('error', {
+    message: err.message,
+    error: {}
   });
 });
 
-server.listen(process.env['app_port'] || 8005);
+module.exports = app;
 
 io.configure(function(){
   io.enable('browser client etag');
@@ -133,5 +147,3 @@ var json = io
   	});
   });
 
-
-console.log("Express server listening");
