@@ -1,6 +1,6 @@
 extends layout
 
-block body
+block content
   #container
     header 
       .subtext Examples of
@@ -123,13 +123,11 @@ block body
             | custom.on('connect', function() {
             |   $('#custom-form').css('display', 'block');
             |   content.append($('<p>').text('Connected'));
-            | }); 
-            |  
+            | });
             | custom.on('fromserver', function(msg) {
             |  content.append($('<p>').text(msg)
             |         .append($('<em>').text(' from server')));
             | });
-            | 
             | $('#custom-form').submit(function(e) {
             |   var textObj = $('#custom-text');
             |   var msg = textObj.val();
@@ -273,19 +271,16 @@ block body
             |   });
         .source-right
           p.title Client
-          pre.prettyprint 
-            | var socket = io.connect('/json');
+          pre.prettyprint
             | var content = $('#json-content');
             | socket.on('connect', function() {
             |   $('#json-form').css('display', 'block');
-            |   content.append($('<p>').text('Connected'));  
+            |   content.append($('<p>').text('Connected'));
             | });
-            |
             | socket.on('message', function(msg) {
             |   content.append($('<p>').text(msg.text)
             |          .append($('<em>').text(' from server')));
             | });
-            |
             | $('#json-form').submit(function(e) {
             |   var textObj = $('#json-text');   
             |   var msg = textObj.val();
