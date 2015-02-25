@@ -2,13 +2,11 @@ extends layout
 
 block content
   #container
-    header 
-      .subtext Examples of
-      a(href='http://socket.io/', target='_blank').logo Socket.IO
-      a(href='http://socket.io/', target='_blank').download
-        span.version v
-        span.number .9
-    section.description It's not official examples. I write these examples for just learning Socket.IO v0.7+.
+    header
+      h1
+        a(href='http://socket.io/', target='_blank').logo Socket.IO
+        | 1.0 Example
+      .sub-title I wrote these examples for just learning Socket.IO.
     section#simple.example
       span.title Simple Example
       input(type='button', value='connect')#simple-connect.connect
