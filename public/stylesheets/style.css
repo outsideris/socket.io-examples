@@ -43,7 +43,7 @@ section {
   box-shadow: 0px 2px 3px 0px rgba(50,50,50,0.11);
   text-align: left;
   vertical-align: top;
-  margin: 0 20px;
+  margin: 0 0 30px;
   -webkit-animation: zoom 500ms;
   -moz-animation: zoom 500ms;
   -ms-animation: zoom 500ms;
@@ -110,6 +110,25 @@ section {
 .browser .body {
   padding: 16px;
   font: 11px "Lucida Grande", "Open Sans";
+}
+.editor {
+  width: 47%;
+  margin-right: 2%;
+  display: inline-block;
+}
+.editor.right {
+  margin-right: 0;
+  margin-left: 2%;
+}
+.editor .title {
+  text-align: center;
+  display: inline-block;
+  width: 280px;
+  color: #766f79;
+  vertical-align: middle;
+}
+.editor .body {
+  padding: 18px 10px;
 }
 @-moz-keyframes zoom {
   0% {

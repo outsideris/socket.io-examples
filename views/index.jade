@@ -10,12 +10,30 @@ block content
     section#simple.example
       .window.browser
         .header
-          .span.bullet.bullet-red
-          .span.bullet.bullet-yellow
-          .span.bullet.bullet-green
-          .span.title
+          span.bullet.bullet-red
+          span.bullet.bullet-yellow
+          span.bullet.bullet-green
+          span.title
             span.scheme https://
             | simple-example
+        .body
+          p chatting message here
+          p chatting message here
+      .window.editor
+        .header
+          span.bullet.bullet-red
+          span.bullet.bullet-yellow
+          span.bullet.bullet-green
+          span.title ~/client/index.js
+        .body
+          p chatting message here
+          p chatting message here
+      .window.editor.right
+        .header
+          span.bullet.bullet-red
+          span.bullet.bullet-yellow
+          span.bullet.bullet-green
+          span.title ~/server/index.js
         .body
           p chatting message here
           p chatting message here
