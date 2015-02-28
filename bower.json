@@ -1,5 +1,6 @@
 {
   "name": "socket.io-examples",
   "dependencies": {
+    "highlightjs": "~8.4.0"
   }
 }
