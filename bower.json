@@ -1,6 +1,7 @@
 {
   "name": "socket.io-examples",
   "dependencies": {
+    "jquery": "~2.1.3",
     "highlightjs": "~8.4.0"
   }
 }
