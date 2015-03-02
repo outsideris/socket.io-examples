@@ -50,7 +50,6 @@ section {
   -o-animation: zoom 500ms;
   animation: zoom 500ms;
   -webkit-animation: zoom 500ms;
-  height: 300px;
 }
 .window .header {
   line-height: 30px;
@@ -129,6 +128,16 @@ section {
 }
 .editor .body {
   padding: 18px 10px;
+}
+.editor .hljs {
+  background: none;
+}
+.editor pre {
+  margin: 0;
+}
+h3.title {
+  margin-top: 60px;
+  text-align: left;
 }
 @-moz-keyframes zoom {
   0% {

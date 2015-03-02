@@ -8,6 +8,7 @@ block content
         | 1.0 Example
       .sub-title I wrote these examples for just learning Socket.IO.
     section#simple.example
+      h3.title Simple Example
       .window.browser
         .header
           span.bullet.bullet-red
@@ -24,65 +25,115 @@ block content
           span.bullet.bullet-red
           span.bullet.bullet-yellow
           span.bullet.bullet-green
-          span.title ~/client/index.js
+          span.title ~/client.js
         .body
-          p chatting message here
-          p chatting message here
+          pre
+            code.js.
+              var socket = io.connect();
+              var content = $('#simple-content');
+              socket.on('connect', function() {
+                $('#simple-form').css('display', 'block');
+                content.append($('&lt;p&gt;').text('Connected'));
+              });
+
+              socket.on('message', function(msg) {
+                content.append($('&lt;p&gt;').text(msg)
+                       .append($('&lt;em&gt;').text(' from server')));
+              });
+
+              $('#simple-form').submit(function(e) {
+                e.preventDefault();
+                var textObj = $('#simple-text');
+                var msg = textObj.val();
+                textObj.val('');
+                content.append($('&lt;p&gt;').text(msg)
+                       .append($('&lt;em&gt;').text(' from me')));
+                socket.send(msg);
+              });
       .window.editor.right
         .header
           span.bullet.bullet-red
           span.bullet.bullet-yellow
           span.bullet.bullet-green
-          span.title ~/server/index.js
+          span.title ~/server.js
         .body
-          p chatting message here
-          p chatting message here
+          pre
+            code.js.
+              var simple = io
+                .sockets
+                .on('connection', function(socket) {
+                  socket.on('message', function(data) {
+                    socket.broadcast.send(data);
+                  });
+                  socket.on('disconnect', function() {
+                    // handle disconnect
+                  });
+                });
       span.title Simple Example
       input(type='button', value='connect')#simple-connect.connect
       #simple-content.textbox
       form#simple-form
         input(type='text')#simple-text
         input(type='submit', value='Submit')
-      .source
-        .source-left
-          p.title Server
-          pre.prettyprint 
-            | var simple = io
-            |   .sockets
-            |   .on('connection', function(socket) {
-            |     socket.on('message', function(data) {
-            |       socket.broadcast.send(data);
-            |     });
-            |     socket.on('disconnect', function() {
-            |       // handle disconnect
-            |     });
-            |   });
-        .source-right
-          p.title Client
-          pre.prettyprint 
-            | var socket = io.connect();
-            | var content = $('#simple-content');
-            | socket.on('connect', function() {
-            |   $('#simple-form').css('display', 'block');
-            |   content.append($('<p>').text('Connected'));  
-            | });
-            | 
-            | socket.on('message', function(msg) {
-            |   content.append($('<p>').text(msg)
-            |          .append($('<em>').text(' from server')));
-            | });
-            |  
-            | $('#simple-form').submit(function(e) {
-            |   e.preventDefault();
-            |   var textObj = $('#simple-text');   
-            |   var msg = textObj.val();
-            |   textObj.val('');
-            |   content.append($('<p>').text(msg)
-            |          .append($('<em>').text(' from me')));
-            |   socket.send(msg);
-            | });
+
     section#namespace.example
-      span.title Namespace Example
+      h3.title Namespace Example
+      .window.browser
+        .header
+          span.bullet.bullet-red
+          span.bullet.bullet-yellow
+          span.bullet.bullet-green
+          span.title
+            span.scheme https://
+            | namespace-example
+        .body
+          p chatting message here
+          p chatting message here
+      .window.editor
+        .header
+          span.bullet.bullet-red
+          span.bullet.bullet-yellow
+          span.bullet.bullet-green
+          span.title ~/client.js
+        .body
+          pre
+            code.js.
+              var namespace = io.connect('/namespace');
+              var content = $('#namespace-content');
+              namespace.on('connect', function() {
+                $('#namespace-form').css('display', 'block');
+                content.append($('&lt;p&gt;').text('Connected'));
+              });
+
+              namespace.on('message', function(msg) {
+                content.append($('&lt;p&gt;').text(msg)
+                       .append($('&lt;em&gt;').text(' from server')));
+              });
+
+              $('#namespace-form').submit(function(e) {
+                var textObj = $('#namespace-text');
+                var msg = textObj.val();
+                textObj.val('');
+                content.append($('&lt;p&gt;').text(msg)
+                       .append($('&lt;em&gt;').text(' from me')));
+                namespace.send(msg);
+              });
+      .window.editor.right
+        .header
+          span.bullet.bullet-red
+          span.bullet.bullet-yellow
+          span.bullet.bullet-green
+          span.title ~/server.js
+        .body
+          pre
+            code.js.
+              var namespace = io
+               .of('/namespace')
+               .on('connection', function(socket) {
+                 socket.on('message', function(data) {
+                   socket.broadcast.send(data);
+                 });
+               });
       input(type='button', value='connect')#namespace-connect.connect
       #namespace-content.textbox
       form#namespace-form
@@ -92,118 +143,216 @@ block content
         .source-left
           p.title Server
           pre.prettyprint 
-            | var namespace = io
-            |   .of('/namespace')
-            |   .on('connection', function(socket) {
-            |     socket.on('message', function(data) {
-            |       socket.broadcast.send(data);
-            |     }); 
-            |   });
-
         .source-right
           p.title Client
           pre.prettyprint 
-            | var namespace = io.connect('/namespace');
-            | var content = $('#namespace-content');
-            | namespace.on('connect', function() {
-            |   $('#namespace-form').css('display', 'block');
-            |   content.append($('<p>').text('Connected'));
-            | }); 
-            |    
-            | namespace.on('message', function(msg) {
-            |   content.append($('<p>').text(msg)
-            |          .append($('<em>').text(' from server')));
-            | });
-            |    
-            | $('#namespace-form').submit(function(e) {
-            |   var textObj = $('#namespace-text');
-            |   var msg = textObj.val();
-            |   textObj.val('');
-            |   content.append($('<p>').text(msg)
-            |          .append($('<em>').text(' from me')));
-            |   namespace.send(msg);
-            | });
-        
+
     section#custom.example
-      span.title Custom Event Example
+      h3.title Custom Event Example
+      .window.browser
+        .header
+          span.bullet.bullet-red
+          span.bullet.bullet-yellow
+          span.bullet.bullet-green
+          span.title
+            span.scheme https://
+            | custom-event-example
+        .body
+          p chatting message here
+          p chatting message here
+      .window.editor
+        .header
+          span.bullet.bullet-red
+          span.bullet.bullet-yellow
+          span.bullet.bullet-green
+          span.title ~/client.js
+        .body
+          pre
+            code.js.
+              var custom = io.connect('/custom');
+              var content = $('#custom-content');
+              custom.on('connect', function() {
+                $('#custom-form').css('display', 'block');
+                content.append($('&lt;p&gt;').text('Connected'));
+              });
+              custom.on('fromserver', function(msg) {
+               content.append($('&lt;p&gt;').text(msg)
+                      .append($('&lt;em&gt;').text(' from server')));
+              });
+              $('#custom-form').submit(function(e) {
+                var textObj = $('#custom-text');
+                var msg = textObj.val();
+                textObj.val('');
+                content.append($('&lt;p&gt;').text(msg)
+                       .append($('&lt;em&gt;').text(' from me')));
+                custom.emit('fromclient', msg);
+              });
+      .window.editor.right
+        .header
+          span.bullet.bullet-red
+          span.bullet.bullet-yellow
+          span.bullet.bullet-green
+          span.title ~/server.js
+        .body
+          pre
+            code.js.
+              var custom = io
+                .of('/custom')
+                .on('connection', function(socket) {
+                  socket.on('fromclient', function(data) {
+                    socket.broadcast.emit('fromserver', data);
+                  });
+                });
       input(type='button', value='connect')#custom-connect.connect
       #custom-content.textbox
       form#custom-form
         input(type='text')#custom-text
         input(type='submit', value='Submit')
-      .source
-        .source-left
-          p.title Server
-          pre.prettyprint 
-            | var custom = io
-            |   .of('/custom')
-            |   .on('connection', function(socket) {
-            |     socket.on('fromclient', function(data) {
-            |       socket.broadcast.emit('fromserver', data);
-            |     }); 
-            |   });
-        .source-right
-          p.title Client
-          pre.prettyprint 
-            | var custom = io.connect('/custom');
-            | var content = $('#custom-content');
-            | custom.on('connect', function() {
-            |   $('#custom-form').css('display', 'block');
-            |   content.append($('<p>').text('Connected'));
-            | });
-            | custom.on('fromserver', function(msg) {
-            |  content.append($('<p>').text(msg)
-            |         .append($('<em>').text(' from server')));
-            | });
-            | $('#custom-form').submit(function(e) {
-            |   var textObj = $('#custom-text');
-            |   var msg = textObj.val();
-            |   textObj.val('');
-            |   content.append($('<p>').text(msg)
-            |          .append($('<em>').text(' from me')));
-            |   custom.emit('fromclient', msg);
-            | });
-        
+
     section#volatile.example
-      span.title Volatile Event Example
+      h3.title Volatile Event Example
+      .window.browser
+        .header
+          span.bullet.bullet-red
+          span.bullet.bullet-yellow
+          span.bullet.bullet-green
+          span.title
+            span.scheme https://
+            | volatile-event-example
+        .body
+          p chatting message here
+          p chatting message here
+      .window.editor
+        .header
+          span.bullet.bullet-red
+          span.bullet.bullet-yellow
+          span.bullet.bullet-green
+          span.title ~/client.js
+        .body
+          pre
+            code.js.
+              var volatile = io.connect('/volatile');
+              var content = $('#volatile-content');
+              volatile.on('connect', function() {
+                content.append($('&lt;p&gt;').text('Connected'));
+              });
+
+              volatile.on('current time', function(msg) {
+                content.append($('&lt;p&gt;').text(msg)
+                       .append($('&lt;em&gt;').text(' from server')));
+              });
+      .window.editor.right
+        .header
+          span.bullet.bullet-red
+          span.bullet.bullet-yellow
+          span.bullet.bullet-green
+          span.title ~/server.js
+        .body
+          pre
+            code.js.
+              var volatile = io
+                .of('/volatile')
+                .on('connection', function(socket) {
+                  socket.on('fromclient', function(data) {
+                    socket.broadcast.emit('fromserver', data);
+                  });
+
+                  var vola = setInterval(function () {
+                    socket.volatile.emit('current time',
+                                         'current time : ' + new Date());
+                  }, 1000);
+
+                  socket.on('disconnect', function () {
+                    clearInterval(vola);
+                  });
+                });
       input(type='button', value='connect')#volatile-connect.connect
       #volatile-content.textbox
-      .source
-        .source-left
-          p.title Server
-          pre.prettyprint 
-            | var volatile = io
-            |   .of('/volatile')
-            |   .on('connection', function(socket) {
-            |     socket.on('fromclient', function(data) {
-            |       socket.broadcast.emit('fromserver', data);
-            |     }); 
-            |    
-            |     var vola = setInterval(function () {
-            |       socket.volatile.emit('current time', 
-            |                            'current time : ' + new Date());
-            |     }, 1000);
-            |  
-            |     socket.on('disconnect', function () {
-            |       clearInterval(vola);
-            |     });
-            |   });
-        .source-right
-          p.title Client
-          pre.prettyprint 
-            | var volatile = io.connect('/volatile');
-            | var content = $('#volatile-content');
-            | volatile.on('connect', function() {
-            |   content.append($('<p>').text('Connected'));
-            | }); 
-            | 
-            | volatile.on('current time', function(msg) {
-            |   content.append($('<p>').text(msg)
-            |          .append($('<em>').text(' from server')));
-            | });
 
     section#room.example
-      span.title Room Event Example
+      h3.title Room Event Example
+      .window.browser
+        .header
+          span.bullet.bullet-red
+          span.bullet.bullet-yellow
+          span.bullet.bullet-green
+          span.title
+            span.scheme https://
+            | room-event-example
+        .body
+          p chatting message here
+          p chatting message here
+      .window.editor
+        .header
+          span.bullet.bullet-red
+          span.bullet.bullet-yellow
+          span.bullet.bullet-green
+          span.title ~/client.js
+        .body
+          pre
+            code.js.
+              var joined = false;
+              var room = io.connect('/room');
+              var content = $('#room-content');
+              room.on('connect', function() {
+                $('#room-form').css('display', 'block');
+                content.append($('&lt;p&gt;').text('Connected'));
+              });
+
+              room.on('joined', function(msg) {
+                content.append($('&lt;p&gt;').text(msg)
+                       .append($('&lt;em&gt;').text(' from server')));
+              });
+
+              room.on('message', function(msg) {
+                content.append($('&lt;p&gt;').text(msg)
+                       .append($('&lt;em&gt;').text(' from server')));
+              });
+
+              $('#room-join').click(function(e) {
+                joined = true;
+                room.emit('join room', $('#room-select').val());
+              });
+
+              $('#room-form').submit(function(e) {
+                var textObj = $('#room-text');
+                var msg = textObj.val();
+                textObj.val('');
+                content.append($('&lt;p&gt;').text(msg)
+                       .append($('&lt;em&gt;').text(' from me')));
+                room.emit('fromclient', msg);
+              });
+      .window.editor.right
+        .header
+          span.bullet.bullet-red
+          span.bullet.bullet-yellow
+          span.bullet.bullet-green
+          span.title ~/server.js
+        .body
+          pre
+            code.js.
+              var Room = io
+                .of('/room')
+                .on('connection', function(socket) {
+                  var joinedRoom = null;
+                  socket.on('join room', function(data) {
+                    socket.join(data);
+                    joinedRoom = data;
+                    socket.emit('joined', "you've joined " + data);
+                    socket.broadcast.to(joinedRoom)
+                                       .send('someone joined room');
+                  });
+                  socket.on('fromclient', function(data) {
+                    if (joinedRoom) {
+                      socket.broadcast.to(joinedRoom).send(data);
+                    } else {
+                      socket.send(
+                         "you're not joined a room." +
+                         "select a room and then push join."
+                      );
+                    }
+                  });
+                });
       input(type='button', value='connect')#room-connect.connect
       #room-content.textbox
       form#room-form
@@ -214,109 +363,71 @@ block content
         input(type='button', value='join')#room-join
         input(type='text')#room-text
         input(type='submit', value='Submit')
-      .source
-        .source-left
-          p.title Server
-          pre.prettyprint 
-            | var Room = io
-            |   .of('/room')
-            |   .on('connection', function(socket) {
-            |     var joinedRoom = null;
-            |     socket.on('join room', function(data) {
-            |       socket.join(data);
-            |       joinedRoom = data;
-            |       socket.emit('joined', "you've joined " + data);
-            |       socket.broadcast.to(joinedRoom)
-            |                          .send('someone joined room');
-            |     }); 
-            |     socket.on('fromclient', function(data) {
-            |       if (joinedRoom) {
-            |         socket.broadcast.to(joinedRoom).send(data);
-            |       } else {
-            |         socket.send(
-            |            "you're not joined a room." +
-            |            "select a room and then push join."
-            |         );
-            |       }
-            |     });
-            |   });
-        .source-right
-          p.title Client
-          pre.prettyprint 
-            | var joined = false;
-            | var room = io.connect('/room');
-            | var content = $('#room-content');
-            | room.on('connect', function() {
-            |   $('#room-form').css('display', 'block');
-            |   content.append($('<p>').text('Connected'));
-            | }); 
-            | 
-            | room.on('joined', function(msg) {
-            |   content.append($('<p>').text(msg)
-            |          .append($('<em>').text(' from server')));
-            | });
-            | 
-            | room.on('message', function(msg) {
-            |   content.append($('<p>').text(msg)
-            |          .append($('<em>').text(' from server')));
-            | });
-            | 
-            | $('#room-join').click(function(e) {
-            |   joined = true;
-            |   room.emit('join room', $('#room-select').val());
-            | });
-            | 
-            | $('#room-form').submit(function(e) {
-            |   var textObj = $('#room-text');
-            |   var msg = textObj.val();
-            |   textObj.val('');
-            |   content.append($('<p>').text(msg)
-            |          .append($('<em>').text(' from me')));
-            |   room.emit('fromclient', msg);
-            | });
 
     section#json.example
-      span.title JSON parse Example
+      h3.title JSON parse Example
+      .window.browser
+        .header
+          span.bullet.bullet-red
+          span.bullet.bullet-yellow
+          span.bullet.bullet-green
+          span.title
+            span.scheme https://
+            | json-parse-example
+        .body
+          p chatting message here
+          p chatting message here
+      .window.editor
+        .header
+          span.bullet.bullet-red
+          span.bullet.bullet-yellow
+          span.bullet.bullet-green
+          span.title ~/client.js
+        .body
+          pre
+            code.js.
+              var content = $('#json-content');
+              socket.on('connect', function() {
+                $('#json-form').css('display', 'block');
+                content.append($('&lt;p&gt;').text('Connected'));
+              });
+              socket.on('message', function(msg) {
+                content.append($('&lt;p&gt;').text(msg.text)
+                       .append($('&lt;em&gt;').text(' from server')));
+              });
+              $('#json-form').submit(function(e) {
+                var textObj = $('#json-text');
+                var msg = textObj.val();
+                textObj.val('');
+                content.append($('&lt;p&gt;').text(msg)
+                       .append($('&lt;em&gt;').text(' from me')));
+                socket.send(msg);
+              });
+      .window.editor.right
+        .header
+          span.bullet.bullet-red
+          span.bullet.bullet-yellow
+          span.bullet.bullet-green
+          span.title ~/server.js
+        .body
+          pre
+            code.js.
+              var json = io
+                .of('/json')
+                .on('connection', function(socket) {
+                  socket.on('message', function(data) {
+                    socket.json.broadcast.send({text:data});
+                  });
+                  socket.on('disconnect', function() {
+                    // handle disconnect
+                  });
+                });
       input(type='button', value='connect')#json-connect.connect
       #json-content.textbox
       form#json-form
         input(type='text')#json-text
         input(type='submit', value='Submit')
-      .source
-        .source-left
-          p.title Server
-          pre.prettyprint 
-            | var json = io
-            |   .of('/json')
-            |   .on('connection', function(socket) {
-            |     socket.on('message', function(data) {
-            |       socket.json.broadcast.send({text:data});
-            |     });
-            |     socket.on('disconnect', function() {
-            |       // handle disconnect
-            |     });
-            |   });
-        .source-right
-          p.title Client
-          pre.prettyprint
-            | var content = $('#json-content');
-            | socket.on('connect', function() {
-            |   $('#json-form').css('display', 'block');
-            |   content.append($('<p>').text('Connected'));
-            | });
-            | socket.on('message', function(msg) {
-            |   content.append($('<p>').text(msg.text)
-            |          .append($('<em>').text(' from server')));
-            | });
-            | $('#json-form').submit(function(e) {
-            |   var textObj = $('#json-text');   
-            |   var msg = textObj.val();
-            |   textObj.val('');
-            |   content.append($('<p>').text(msg)
-            |          .append($('<em>').text(' from me')));
-            |   socket.send(msg);
-            | }); 
-          
+
     footer
       | Written by 
       a(href='http://blog.outsider.ne.kr', target='_blank') Outsider
@@ -325,15 +436,14 @@ block content
        
   a(href='https://github.com/outsideris/socket.io-examples', target='_blank')
     img(style='position: absolute; top: 0; right: 0; border: 0;', src='https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png', alt='Fork me on GitHub')
-            
-  script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js')
-  script(src='/socket.io/socket.io.js')
-  script(src='/javascripts/prettify.js')
+
+block inline-script
   script.
-    $(document).ready(function(){
-       $('form').css('display', 'none');
-       prettyPrint();
-       
+    (function() {
+      hljs.initHighlightingOnLoad();
+
+      $('form').css('display', 'none');
+
       //Simple Example
       $('#simple-connect').click(function() {
         $(this).unbind('click');
@@ -500,5 +610,4 @@ block content
           }
         });
       });
-
-    });
+    })();
