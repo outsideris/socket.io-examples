@@ -106,9 +106,45 @@ section {
 .browser .header .title .scheme {
   color: #7ed321;
 }
+.browser .header .button {
+  display: inline-block;
+}
+.browser .header .button input {
+  margin-left: 10px;
+  border: 1px solid #c3c3c3;
+  background-color: #e8e8e8;
+  padding: 4px 10px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+}
 .browser .body {
   padding: 16px;
-  font: 11px "Lucida Grande", "Open Sans";
+  font: 14px "Lucida Grande", "Open Sans";
+  height: 200px;
+  overflow: auto;
+}
+.browser .footer {
+  font: 14px "Lucida Grande", "Open Sans";
+  background: #e8e8e8;
+  padding: 5px 10px;
+}
+.browser .footer input[type=text] {
+  width: 80%;
+  padding: 5px;
+}
+.browser .footer input[type=submit] {
+  margin-left: 10px;
+  border: 1px solid #c3c3c3;
+  background-color: #e8e8e8;
+  padding: 4px 10px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
 }
 .editor {
   width: 47%;

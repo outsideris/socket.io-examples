@@ -17,9 +17,15 @@ block content
           span.title
             span.scheme https://
             | simple-example
-        .body
+          .button
+            input(type='button', value='connect')#simple-connect
+        .body#simple-content
           p chatting message here
           p chatting message here
+        .footer
+          form#simple-form
+            input(type='text')#simple-text
+            input(type='submit', value='Send')
       .window.editor
         .header
           span.bullet.bullet-red
@@ -69,12 +75,6 @@ block content
                     // handle disconnect
                   });
                 });
-      span.title Simple Example
-      input(type='button', value='connect')#simple-connect.connect
-      #simple-content.textbox
-      form#simple-form
-        input(type='text')#simple-text
-        input(type='submit', value='Submit')
 
     section#namespace.example
       h3.title Namespace Example
@@ -86,9 +86,15 @@ block content
           span.title
             span.scheme https://
             | namespace-example
-        .body
+          .button
+            input(type='button', value='connect')#namespace-connect
+        .body#namespace-content
           p chatting message here
           p chatting message here
+        .footer
+          form#namespace-form
+            input(type='text')#namespace-text
+            input(type='submit', value='Send')
       .window.editor
         .header
           span.bullet.bullet-red
@@ -134,18 +140,6 @@ block content
                    socket.broadcast.send(data);
                  });
                });
-      input(type='button', value='connect')#namespace-connect.connect
-      #namespace-content.textbox
-      form#namespace-form
-        input(type='text')#namespace-text
-        input(type='submit', value='Submit')
-      .source
-        .source-left
-          p.title Server
-          pre.prettyprint 
-        .source-right
-          p.title Client
-          pre.prettyprint 
 
     section#custom.example
       h3.title Custom Event Example
@@ -157,9 +151,15 @@ block content
           span.title
             span.scheme https://
             | custom-event-example
-        .body
+          .button
+            input(type='button', value='connect')#custom-connect
+        .body#custom-content
           p chatting message here
           p chatting message here
+        .footer
+          form#custom-form
+            input(type='text')#custom-text
+            input(type='submit', value='Send')
       .window.editor
         .header
           span.bullet.bullet-red
@@ -203,11 +203,6 @@ block content
                     socket.broadcast.emit('fromserver', data);
                   });
                 });
-      input(type='button', value='connect')#custom-connect.connect
-      #custom-content.textbox
-      form#custom-form
-        input(type='text')#custom-text
-        input(type='submit', value='Submit')
 
     section#volatile.example
       h3.title Volatile Event Example
@@ -219,7 +214,9 @@ block content
           span.title
             span.scheme https://
             | volatile-event-example
-        .body
+          .button
+            input(type='button', value='connect')#volatile-connect
+        .body#volatile-content
           p chatting message here
           p chatting message here
       .window.editor
@@ -266,8 +263,6 @@ block content
                     clearInterval(vola);
                   });
                 });
-      input(type='button', value='connect')#volatile-connect.connect
-      #volatile-content.textbox
 
     section#room.example
       h3.title Room Event Example
@@ -279,9 +274,20 @@ block content
           span.title
             span.scheme https://
             | room-event-example
-        .body
+          .button
+            input(type='button', value='connect')#room-connect
+        .body#room-content
           p chatting message here
           p chatting message here
+        .footer
+          form#room-form
+            select#room-select
+              option(value='first room') first room
+              option(value='second room') second room
+              option(value='third room') third room
+            input(type='button', value='join')#room-join
+            input(type='text')#room-text
+            input(type='submit', value='Send')
       .window.editor
         .header
           span.bullet.bullet-red
@@ -353,16 +359,6 @@ block content
                     }
                   });
                 });
-      input(type='button', value='connect')#room-connect.connect
-      #room-content.textbox
-      form#room-form
-        select#room-select
-          option(value='first room') first room
-          option(value='second room') second room
-          option(value='third room') third room
-        input(type='button', value='join')#room-join
-        input(type='text')#room-text
-        input(type='submit', value='Submit')
 
     section#json.example
       h3.title JSON parse Example
@@ -374,9 +370,15 @@ block content
           span.title
             span.scheme https://
             | json-parse-example
-        .body
+          .button
+            input(type='button', value='connect')#json-connect
+        .body#json-content
           p chatting message here
           p chatting message here
+        .footer
+          form#json-form
+            input(type='text')#json-text
+            input(type='submit', value='Send')
       .window.editor
         .header
           span.bullet.bullet-red
@@ -422,11 +424,6 @@ block content
                     // handle disconnect
                   });
                 });
-      input(type='button', value='connect')#json-connect.connect
-      #json-content.textbox
-      form#json-form
-        input(type='text')#json-text
-        input(type='submit', value='Submit')
 
     footer
       | Written by 
