@@ -18,15 +18,15 @@ header .logo {
   margin-right: 10px;
 }
 h1 {
-  font-size: 2em;
+  font-size: 3em;
   margin-bottom: 5px;
 }
 .sub-title {
-  font-size: 0.8em;
+  margin-top: 10px;
 }
 section {
   width: 1000px;
-  margin: 0 auto;
+  margin: 100px auto 0;
 }
 .window {
   border: 1px solid #c3c3c3;
@@ -57,7 +57,7 @@ section {
   padding: 2px 9px 0;
 }
 .window .header .title {
-  font: 11px "Myriad Pro", "Arial";
+  font: 1em "Myriad Pro", "Arial";
 }
 .window .bullet {
   height: 11px;
@@ -99,21 +99,23 @@ section {
   -ms-border-radius: 4px;
   -o-border-radius: 4px;
   border-radius: 4px;
-  padding: 6px 14px 4px;
+  padding: 3px 14px;
   margin-left: 10px;
   vertical-align: middle;
 }
 .browser .header .title .scheme {
   color: #7ed321;
+  margin-right: 2px;
 }
 .browser .header .button {
   display: inline-block;
 }
 .browser .header .button input {
+  font-size: 0.9em;
   margin-left: 10px;
   border: 1px solid #c3c3c3;
   background-color: #e8e8e8;
-  padding: 4px 10px;
+  padding: 3px 10px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   -ms-border-radius: 3px;
@@ -122,7 +124,7 @@ section {
 }
 .browser .body {
   padding: 16px;
-  font: 14px "Lucida Grande", "Open Sans";
+  font: 1em "Lucida Grande", "Open Sans";
   height: 200px;
   overflow: auto;
 }
@@ -172,7 +174,9 @@ section {
   margin: 0;
 }
 h3.title {
-  margin-top: 60px;
+  font-size: 2em;
+  margin-top: 0;
+  margin-bottom: 10px;
   text-align: left;
 }
 footer {
