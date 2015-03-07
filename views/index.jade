@@ -20,8 +20,6 @@ block content
           .button
             input(type='button', value='connect')#simple-connect
         .body#simple-content
-          p chatting message here
-          p chatting message here
         .footer
           form#simple-form
             input(type='text')#simple-text
@@ -35,26 +33,28 @@ block content
         .body
           pre
             code.js.
-              var socket = io.connect();
+              var socket = io.connect(location.origin);
               var content = $('#simple-content');
               socket.on('connect', function() {
-                $('#simple-form').css('display', 'block');
-                content.append($('&lt;p&gt;').text('Connected'));
+                $('#simple-form').show();
+                content.append($('&lt;p&gt;').text('connected').prepend($('&lt;span&gt;').text('system')));
               });
 
               socket.on('message', function(msg) {
-                content.append($('&lt;p&gt;').text(msg)
-                       .append($('&lt;em&gt;').text(' from server')));
+                content.append($('&lt;p&gt;').text(msg).prepend($('&lt;span&gt;').text('somebody')));
+                content.scrollTop(content.height());
               });
 
               $('#simple-form').submit(function(e) {
                 e.preventDefault();
                 var textObj = $('#simple-text');
                 var msg = textObj.val();
-                textObj.val('');
-                content.append($('&lt;p&gt;').text(msg)
-                       .append($('&lt;em&gt;').text(' from me')));
-                socket.send(msg);
+                if ($.trim(msg) !== '') {
+                  textObj.val('');
+                  content.append(($('&lt;p&gt;').text(msg).prepend($('&lt;span&gt;').text('me'))));
+                  content.scrollTop(content.height());
+                  socket.send(msg);
+                }
               });
       .window.editor.right
         .header
@@ -65,16 +65,14 @@ block content
         .body
           pre
             code.js.
-              var simple = io
-                .sockets
-                .on('connection', function(socket) {
-                  socket.on('message', function(data) {
-                    socket.broadcast.send(data);
-                  });
-                  socket.on('disconnect', function() {
-                    // handle disconnect
-                  });
+              io.on('connection', function(socket) {
+                socket.on('message', function(msg) {
+                  socket.broadcast.send(msg);
                 });
+                socket.on('disconnect', function() {
+                  socket.broadcast.send('disconnected');
+                });
+              });
 
     section#namespace.example
       h3.title Namespace Example
@@ -437,20 +435,18 @@ block inline-script
     (function() {
       hljs.initHighlightingOnLoad();
 
-      $('form').css('display', 'none');
-
       //Simple Example
       $('#simple-connect').click(function() {
-        $(this).unbind('click');
-        var socket = io.connect();
+        $(this).hide();
+        var socket = io.connect(location.origin);
         var content = $('#simple-content');
         socket.on('connect', function() {
-          $('#simple-form').css('display', 'block');
-          content.append($('<p>').text('Connected'));  
+          $('#simple-form').show();
+          content.append($('<p>').text('connected').prepend($('<span>').text('system')));
         });
         
         socket.on('message', function(msg) {
-          content.append($('<p>').text(msg).append($('<em>').text(' from server')));
+          content.append($('<p>').text(msg).prepend($('<span>').text('somebody')));
           content.scrollTop(content.height());
         });
         
@@ -458,9 +454,9 @@ block inline-script
           e.preventDefault();
           var textObj = $('#simple-text');   
           var msg = textObj.val();
-          if (msg !== '') {
+          if ($.trim(msg) !== '') {
             textObj.val('');
-            content.append($('<p>').text(msg).append($('<em>').text(' from me')));
+            content.append(($('<p>').text(msg).prepend($('<span>').text('me'))));
             content.scrollTop(content.height());
             socket.send(msg);
           }

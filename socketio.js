@@ -12,16 +12,14 @@ module.exports = function(io) {
   //});
 
   // Simple Example
-  var simple = io
-    .sockets
-    .on('connection', function(socket) {
-      socket.on('message', function(data) {
-        socket.broadcast.send(data);
-      });
-      socket.on('disconnect', function() {
-        // handle disconnect
-      });
+  io.on('connection', function(socket) {
+    socket.on('message', function(msg) {
+      socket.broadcast.send(msg);
     });
+    socket.on('disconnect', function() {
+      socket.broadcast.send('disconnected');
+    });
+  });
 
   // Namespace Example
   var namespace = io
