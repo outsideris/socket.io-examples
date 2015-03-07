@@ -128,10 +128,24 @@ section {
   height: 200px;
   overflow: auto;
 }
+.browser .body p {
+  margin: 8px 0;
+}
+.browser .body span {
+  font-size: 0.9em;
+  color: #999;
+}
+.browser .body span:after {
+  content: ":";
+  margin-right: 10px;
+}
 .browser .footer {
   font: 14px "Lucida Grande", "Open Sans";
   background: #e8e8e8;
   padding: 5px 10px;
+}
+.browser .footer form {
+  display: none;
 }
 .browser .footer input[type=text] {
   width: 80%;
