@@ -40,6 +40,9 @@ module.exports = function(io) {
       socket.on('fromclient', function(data) {
         socket.broadcast.emit('fromserver', data);
       });
+      socket.on('disconnect', function() {
+        socket.broadcast.emit('fromserver', 'disconnected');
+      });
     });
 
   // Volatile Example
