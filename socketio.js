@@ -28,6 +28,9 @@ module.exports = function(io) {
       socket.on('message', function(data) {
         socket.broadcast.send(data);
       });
+      socket.on('disconnect', function() {
+        socket.broadcast.send('disconnected');
+      });
     });
 
   // Custom Example
