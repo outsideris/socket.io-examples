@@ -49,16 +49,13 @@ module.exports = function(io) {
   var volatile = io
     .of('/volatile')
     .on('connection', function(socket) {
-      socket.on('fromclient', function(data) {
-        socket.broadcast.emit('fromserver', data);
-      });
-
       var vola = setInterval(function () {
         socket.volatile.emit('current time', 'current time : ' + new Date());
-      }, 1000);
+      }, 2000);
 
       socket.on('disconnect', function () {
         clearInterval(vola);
+        socket.volatile.emit('current time', 'disconnected');
       });
     });
 

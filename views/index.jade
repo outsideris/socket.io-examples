@@ -225,8 +225,6 @@ block content
           .button
             input(type='button', value='connect')#volatile-connect
         .body#volatile-content
-          p chatting message here
-          p chatting message here
       .window.editor
         .header
           span.bullet.bullet-red
@@ -236,15 +234,15 @@ block content
         .body
           pre
             code.js.
-              var volatile = io.connect('/volatile');
+              var volatile = io.connect(location.origin + '/volatile');
               var content = $('#volatile-content');
               volatile.on('connect', function() {
-                content.append($('&lt;p&gt;').text('Connected'));
+                content.append($('&lt;p&gt;').text('connected').prepend($('&lt;span&gt;').text('system')));
               });
 
               volatile.on('current time', function(msg) {
-                content.append($('&lt;p&gt;').text(msg)
-                       .append($('&lt;em&gt;').text(' from server')));
+                content.append($('&lt;p&gt;').text(msg).prepend($('&lt;span&gt;').text('server')));
+                content.scrollTop(content.height());
               });
       .window.editor.right
         .header
@@ -258,17 +256,13 @@ block content
               var volatile = io
                 .of('/volatile')
                 .on('connection', function(socket) {
-                  socket.on('fromclient', function(data) {
-                    socket.broadcast.emit('fromserver', data);
-                  });
-
                   var vola = setInterval(function () {
-                    socket.volatile.emit('current time',
-                                         'current time : ' + new Date());
-                  }, 1000);
+                    socket.volatile.emit('current time', 'current time : ' + new Date());
+                  }, 2000);
 
                   socket.on('disconnect', function () {
                     clearInterval(vola);
+                    socket.volatile.emit('current time', 'disconnected');
                   });
                 });
 
@@ -531,16 +525,15 @@ block inline-script
       
       // Volatile Event Example
       $('#volatile-connect').click(function() {
-        $(this).unbind('click');
-        var volatile = io.connect('/volatile');
+        $(this).hide();
+        var volatile = io.connect(location.origin + '/volatile');
         var content = $('#volatile-content');
         volatile.on('connect', function() {
-          content.append($('<p>').text('Connected'));
-        }); 
+          content.append($('<p>').text('connected').prepend($('<span>').text('system')));
+        });
 
         volatile.on('current time', function(msg) {
-          
-          content.append($('<p>').text(msg).append($('<em>').text(' from server')));
+          content.append($('<p>').text(msg).prepend($('<span>').text('server')));
           content.scrollTop(content.height());
         });
       });
