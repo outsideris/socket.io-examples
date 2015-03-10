@@ -148,11 +148,14 @@ section {
   display: none;
 }
 .browser .footer input[type=text] {
-  width: 80%;
+  width: 70%;
   padding: 5px;
 }
+.browser .footer select,
+.browser .footer input[type=button],
 .browser .footer input[type=submit] {
   margin-left: 10px;
+  margin-right: 10px;
   border: 1px solid #c3c3c3;
   background-color: #e8e8e8;
   padding: 4px 10px;

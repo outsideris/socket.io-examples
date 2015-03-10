@@ -279,8 +279,6 @@ block content
           .button
             input(type='button', value='connect')#room-connect
         .body#room-content
-          p chatting message here
-          p chatting message here
         .footer
           form#room-form
             select#room-select
@@ -300,21 +298,21 @@ block content
           pre
             code.js.
               var joined = false;
-              var room = io.connect('/room');
+              var room = io.connect(location.origin + '/room');
               var content = $('#room-content');
               room.on('connect', function() {
-                $('#room-form').css('display', 'block');
-                content.append($('&lt;p&gt;').text('Connected'));
+                $('#room-form').show();
+                content.append($('&lt;p&gt;').text('connected').prepend($('&lt;span&gt;').text('system')));
               });
 
               room.on('joined', function(msg) {
-                content.append($('&lt;p&gt;').text(msg)
-                       .append($('&lt;em&gt;').text(' from server')));
+                content.append($('&lt;p&gt;').text(msg).prepend($('&lt;span&gt;').text('somebody')));
+                content.scrollTop(content.height());
               });
 
               room.on('message', function(msg) {
-                content.append($('&lt;p&gt;').text(msg)
-                       .append($('&lt;em&gt;').text(' from server')));
+                content.append($('&lt;p&gt;').text(msg).prepend($('&lt;span&gt;').text('somebody')));
+                content.scrollTop(content.height());
               });
 
               $('#room-join').click(function(e) {
@@ -323,12 +321,15 @@ block content
               });
 
               $('#room-form').submit(function(e) {
+                e.preventDefault();
                 var textObj = $('#room-text');
                 var msg = textObj.val();
-                textObj.val('');
-                content.append($('&lt;p&gt;').text(msg)
-                       .append($('&lt;em&gt;').text(' from me')));
-                room.emit('fromclient', msg);
+                if ($.trim(msg) !== '') {
+                  textObj.val('');
+                  content.append($('&lt;p&gt;').text(msg).prepend($('&lt;span&gt;').text('me')));
+                  content.scrollTop(content.height());
+                  room.emit('fromclient', msg);
+                }
               });
       .window.editor.right
         .header
@@ -346,18 +347,14 @@ block content
                   socket.on('join room', function(data) {
                     socket.join(data);
                     joinedRoom = data;
-                    socket.emit('joined', "you've joined " + data);
-                    socket.broadcast.to(joinedRoom)
-                                       .send('someone joined room');
+                    socket.emit('joined', 'you\'ve joined ' + data);
+                    socket.broadcast.to(joinedRoom).send('someone joined room');
                   });
                   socket.on('fromclient', function(data) {
                     if (joinedRoom) {
                       socket.broadcast.to(joinedRoom).send(data);
                     } else {
-                      socket.send(
-                         "you're not joined a room." +
-                         "select a room and then push join."
-                      );
+                      socket.send('you\'re not joined a room. select a room and then push join.');
                     }
                   });
                 });
@@ -540,22 +537,22 @@ block inline-script
       
       // Room Event Example
       $('#room-connect').click(function() {
-        $(this).unbind('click');
+        $(this).hide();
         var joined = false;
-        var room = io.connect('/room');
+        var room = io.connect(location.origin + '/room');
         var content = $('#room-content');
         room.on('connect', function() {
-          $('#room-form').css('display', 'block');
-          content.append($('<p>').text('Connected'));
-        }); 
+          $('#room-form').show();
+          content.append($('<p>').text('connected').prepend($('<span>').text('system')));
+        });
         
         room.on('joined', function(msg) {
-          content.append($('<p>').text(msg).append($('<em>').text(' from server')));
+          content.append($('<p>').text(msg).prepend($('<span>').text('somebody')));
           content.scrollTop(content.height());
         });
         
         room.on('message', function(msg) {
-          content.append($('<p>').text(msg).append($('<em>').text(' from server')));
+          content.append($('<p>').text(msg).prepend($('<span>').text('somebody')));
           content.scrollTop(content.height());
         });
         
@@ -568,9 +565,9 @@ block inline-script
           e.preventDefault();
           var textObj = $('#room-text');
           var msg = textObj.val();
-          if (msg !== '') {
+          if ($.trim(msg) !== '') {
             textObj.val('');
-            content.append($('<p>').text(msg).append($('<em>').text(' from me')));
+            content.append($('<p>').text(msg).prepend($('<span>').text('me')));
             content.scrollTop(content.height());
             room.emit('fromclient', msg);
           }
