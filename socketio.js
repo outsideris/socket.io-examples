@@ -65,10 +65,16 @@ module.exports = function(io) {
     .on('connection', function(socket) {
       var joinedRoom = null;
       socket.on('join room', function(data) {
+        if (!!joinedRoom) {
+          socket.leave(joinedRoom);
+          socket.emit('joined', 'you\'ve left from ' + joinedRoom);
+          socket.broadcast.to(joinedRoom).send('someone left this room.');
+          joinedRoom = null;
+        }
         socket.join(data);
         joinedRoom = data;
-        socket.emit('joined', 'you\'ve joined ' + data);
-        socket.broadcast.to(joinedRoom).send('someone joined room');
+        socket.emit('joined', 'you\'ve joined to ' + data);
+        socket.broadcast.to(joinedRoom).send('someone joined room.');
       });
       socket.on('fromclient', function(data) {
         if (joinedRoom) {

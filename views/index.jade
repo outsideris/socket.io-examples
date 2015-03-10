@@ -306,7 +306,7 @@ block content
               });
 
               room.on('joined', function(msg) {
-                content.append($('&lt;p&gt;').text(msg).prepend($('&lt;span&gt;').text('somebody')));
+                content.append($('&lt;p&gt;').text(msg).prepend($('&lt;span&gt;').text('system')));
                 content.scrollTop(content.height());
               });
 
@@ -345,10 +345,16 @@ block content
                 .on('connection', function(socket) {
                   var joinedRoom = null;
                   socket.on('join room', function(data) {
+                    if (!!joinedRoom) {
+                      socket.leave(joinedRoom);
+                      socket.emit('joined', 'you\'ve left from ' + joinedRoom);
+                      socket.broadcast.to(joinedRoom).send('someone left this room.');
+                      joinedRoom = null;
+                    }
                     socket.join(data);
                     joinedRoom = data;
-                    socket.emit('joined', 'you\'ve joined ' + data);
-                    socket.broadcast.to(joinedRoom).send('someone joined room');
+                    socket.emit('joined', 'you\'ve joined to ' + data);
+                    socket.broadcast.to(joinedRoom).send('someone joined room.');
                   });
                   socket.on('fromclient', function(data) {
                     if (joinedRoom) {
@@ -547,7 +553,7 @@ block inline-script
         });
         
         room.on('joined', function(msg) {
-          content.append($('<p>').text(msg).prepend($('<span>').text('somebody')));
+          content.append($('<p>').text(msg).prepend($('<span>').text('system')));
           content.scrollTop(content.height());
         });
         
