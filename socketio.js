@@ -84,16 +84,4 @@ module.exports = function(io) {
         }
       });
     });
-
-  // JSON Parse Example
-  var json = io
-    .of('/json')
-    .on('connection', function(socket) {
-      socket.on('message', function(data) {
-        socket.json.broadcast.send({text:data});
-      });
-      socket.on('disconnect', function() {
-        // handle disconnect
-      });
-    });
 }
