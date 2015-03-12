@@ -1,15 +1,8 @@
-module.exports = function(io) {
-  //io.configure(function(){
-  //  io.enable('browser client etag');
-  //  io.set('log level', 1);
-  //  io.set('transports', [
-  //    'websocket',
-  //    'flashsocket',
-  //    'htmlfile',
-  //    'xhr-polling',
-  //    'jsonp-polling'
-  //  ]);
-  //});
+module.exports = function(server) {
+  var io = require('socket.io')(server, {
+    transports: ['polling', 'websocket'],
+    allowUpgrades: true
+  });
 
   // Simple Example
   io.on('connection', function(socket) {
